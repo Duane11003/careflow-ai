@@ -1,0 +1,1 @@
+export type StatusFilter = 'All' | 'Pending' | 'Completed'
