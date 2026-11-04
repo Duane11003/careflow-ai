@@ -1,52 +1,29 @@
-import { useState, useEffect } from 'react'
-import type { Patient } from './types/patients'
-
-import { getPatients } from './api/patients'
+import { useGetPatientsQuery } from './api/patientsApi'
+import { PatientList } from './components/PatientList'
+import { DropdownFilter } from './components/DropdownFilter'
+import { useState } from 'react'
+import type { StatusFilter } from './types/filter'
 
 function App() {
-  const [patients, setPatients] = useState<Patient[]>([])
-  const [error, setError] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(true)
+  const { data: patients, isLoading, isError } = useGetPatientsQuery()
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>('All')
 
-  useEffect(() => {
-      const callPatients = async () => {
-        try {
-          const patients = await getPatients()
-          setPatients(patients)
-       
-          
-        } catch (error) {
-          setError(true)
-          console.error(error)
-        
-        } finally {
-          setLoading(false)
-        }
-      }
+const filteredPatients = (patients ?? []).filter(
+  (patient) =>
+    statusFilter === 'All' ||
+    patient.follow_up_status === statusFilter
+)
 
-      callPatients()
-  }, [])
 
-  const patientsList = patients.map((patient) => {
-    return (
-      <div key={patient.id}>
-        <h2>{`${patient.first_name} ${patient.last_name}`}</h2>
-        <p>Discharge date:{patient.discharge_date}</p>
-        <p>Follow up status:{patient.follow_up_status}</p>
-      </div>
-    )
-  })
-
-  const errorMsg = error && <>Error fetching patients</>
-
-  if (error) return errorMsg
-  if (loading) return <p>Loading...</p>
+  if (isError) return <p>Error fetching patients</p>
+  if (isLoading) return <p>Loading...</p>
 
   return (
     <>
       <section id="center">
         <div>
-          {patientsList}
+          <DropdownFilter onChange={setStatusFilter} />
+          <PatientList patients={filteredPatients} />
         </div>
       </section>
 
