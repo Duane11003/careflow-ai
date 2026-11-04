@@ -2,9 +2,10 @@ import type { Patient } from '../types/patients'
 
 interface PatientListProps {
   patients: Patient[]
+  onSelectPatient: (patientId: number) => void
 }
 
-export const PatientList = ({ patients }: PatientListProps) => {
+export const PatientList = ({ patients, onSelectPatient }: PatientListProps) => {
   return (
     <table>
       <thead>
@@ -20,7 +21,11 @@ export const PatientList = ({ patients }: PatientListProps) => {
         {patients.map((patient) => (
           <tr key={patient.id}>
             <td>{patient.id}</td>
-            <td>{`${patient.first_name} ${patient.last_name}`}</td>
+            <td>
+              <button type='button' onClick={() => onSelectPatient(patient.id)}>
+                {`${patient.first_name} ${patient.last_name}`}
+              </button>
+            </td>
             <td>{patient.discharge_date}</td>
             <td>
               {patient.follow_up_status.charAt(0).toUpperCase() +
