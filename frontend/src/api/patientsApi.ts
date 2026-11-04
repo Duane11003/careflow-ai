@@ -7,8 +7,11 @@ export const patientsApi = createApi({
     endpoints: (build) => ({
         getPatients: build.query<Patient[], void>({ // returnType, queryParam
             query: () => `patients`
+        }),
+        getPatientsById: build.query<Patient, number>({
+            query: (patientId: number) => `patients/${patientId}`
         })
     })
 })
 
-export const { useGetPatientsQuery } = patientsApi
+export const { useGetPatientsQuery, useGetPatientsByIdQuery } = patientsApi

@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from app.schemas.patient import Patient
 from datetime import date
 
@@ -15,3 +15,13 @@ def return_patients():
     return patients_list
 
 
+@router.get('/api/patients/{patient_id}', response_model=Patient)
+def return_patient(patient_id: int):
+    patient = next((p for p in patients_list if p.id == patient_id), None) # find the first patient with the matching ID, or return None
+    if patient:
+        return patient
+
+    raise HTTPException(
+        status_code=404,
+        detail=f"No patient found for {patient_id}"
+    )
