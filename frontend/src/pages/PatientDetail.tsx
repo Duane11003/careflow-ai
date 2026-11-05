@@ -8,10 +8,13 @@ export const PatientDetail = () => {
     const { id } = useParams()
     const numberId = Number(id)
     const isValidParameter = Number.isInteger(numberId) && numberId > 0
-    const { data: patient, isLoading, isError } = useGetPatientsByIdQuery(isValidParameter ? numberId : skipToken)
+    const { data: patient, isLoading, isError, error } = useGetPatientsByIdQuery(isValidParameter ? numberId : skipToken)
 
     if (isLoading) return <p>Loading patient data...</p>
-    if (isError) return <p>Failed to load data</p>
+    if (isError) {
+        const message = error && 'status' in error ? `Failed to load patient (HTTP ${error.status})` : 'An unexpected error occured'
+        return <p>{message}</p>
+    }
     if (!isValidParameter) return <p>Invalid patient ID</p>
     if (!patient) return <p>Patient not found</p>
     
