@@ -42,14 +42,14 @@ def db_session() -> Generator[Session, None, None]:
                     id=2,
                     first_name="Jane",
                     last_name="Smith",
-                    discharge_date=date(2026, 7, 1),
+                    discharge_date=date(2026, 10, 28),
                     follow_up_status="completed",
                 ),
                 Patient(
                     id=3,
                     first_name="Adam",
                     last_name="Smith",
-                    discharge_date=date(2026, 7, 5),
+                    discharge_date=date(2026, 7, 28),
                     follow_up_status="pending",
                 ),
             ]
