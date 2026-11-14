@@ -8,6 +8,7 @@ from alembic import context
 from app.database import Base
 from app.models.patient import Patient
 from app.models.medication import Medication
+from app.models.appointment import Appointment
 
 from app.config import DATABASE_URL
 

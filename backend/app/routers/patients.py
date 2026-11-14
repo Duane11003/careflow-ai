@@ -8,6 +8,9 @@ from app.services.patient_service import get_all_patients, get_patient_by_id
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.schemas.appointment import Appointment as AppointmentSchema
+from app.services.appointment_service import get_appointments_by_patient_id
+
 router = APIRouter()
 
 
@@ -32,3 +35,11 @@ def get_patient_medications(patient_id: int, db: Annotated[Session, Depends(get_
         raise HTTPException(status_code=404, detail="Patient not found")
 
     return get_medications_by_patient_id(db, patient_id)
+
+@router.get('/api/patients/{patient_id}/appointments', response_model=list[AppointmentSchema])
+def get_patient_appointments(patient_id: int, db: Annotated[Session, Depends(get_db)]):
+    patient = get_patient_by_id(db, patient_id)
+    if patient is None:
+        raise HTTPException(status_code=404, detail="Patient not found")
+
+    return get_appointments_by_patient_id(db, patient_id)
