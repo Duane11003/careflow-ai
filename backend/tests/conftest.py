@@ -11,6 +11,9 @@ from app.database import Base, get_db
 from app.main import app
 from app.models.patient import Patient
 
+from app.models.appointment import Appointment
+from app.models.medication import Medication
+
 
 # Create an in-memory SQLite database for testing
 SQLALCHEMY_DATABASE_URL = "sqlite://"
@@ -54,6 +57,18 @@ def db_session() -> Generator[Session, None, None]:
                 ),
             ]
         )
+        session.commit()
+
+        session.add(
+            Appointment(
+                patient_id=1,
+                date=date(2026, 12, 1),
+                provider="Dr. Williams",
+                reason="Blood pressure follow-up",
+                status="scheduled",
+            )
+        )
+
         session.commit()
 
         try:

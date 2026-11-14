@@ -6,6 +6,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 if TYPE_CHECKING:
+    from app.models.appointment import Appointment
     from app.models.medication import Medication
 
 class Patient(Base):
@@ -16,3 +17,4 @@ class Patient(Base):
     discharge_date: Mapped[date]
     follow_up_status: Mapped[str] = mapped_column(String(20))
     medications: Mapped[list["Medication"]] = relationship(back_populates="patient")
+    appointments: Mapped[list["Appointment"]] = relationship(back_populates="patient")
